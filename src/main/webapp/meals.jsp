@@ -11,21 +11,31 @@
 
 <html>
 <head>
+    <style>
+        .normal {
+            color: green;
+        }
+
+        .excess {
+            color: red;
+        }
+    </style>
+
     <title>Title</title>
 </head>
 <body>
 <c:forEach var="meal" items="${meal_list}">
     <table>
         <c:if test="${meal.isExcess()==false}">
-            <tr bgcolor="red">
+            <tr class="excess">
         </c:if>
         <c:if test="${meal.isExcess()}">
-            <tr bgcolor="green">
+            <tr class="normal">
         </c:if>
             <td ><c:out value="${meal.getDescription()}"/></td>
             <td><c:out value="${meal.getCalories()}"/></td>
             <td><c:out value="${meal.getFormattedDateTime()}"/></td>
-            <td><a href="edit.jsp">Update</a></td>
+            <td><a href="edit.jsp?id=${meal.getId()}">Update</a></td>
             <td>Delete</td>
         </tr>
     </table>

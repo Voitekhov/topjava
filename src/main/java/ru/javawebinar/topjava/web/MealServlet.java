@@ -17,4 +17,9 @@ public class MealServlet extends HttpServlet {
                         LocalTime.of(10, 0), LocalTime.of(23, 0), 2005));
         req.getRequestDispatcher("/meals.jsp").forward(req, resp);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
 }
