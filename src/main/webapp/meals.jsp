@@ -16,11 +16,20 @@
 <body>
 <c:forEach var="meal" items="${meal_list}">
     <table>
-        <tr>
-            <td><c:out value="${meal.getDescription()}"/></td>
+        <c:if test="${meal.isExcess()==false}">
+            <tr bgcolor="red">
+        </c:if>
+        <c:if test="${meal.isExcess()}">
+            <tr bgcolor="green">
+        </c:if>
+            <td ><c:out value="${meal.getDescription()}"/></td>
             <td><c:out value="${meal.getCalories()}"/></td>
             <td><c:out value="${meal.getFormattedDateTime()}"/></td>
+            <td><a href="edit.jsp">Update</a></td>
+            <td>Delete</td>
+        </tr>
     </table>
 </c:forEach>
+<td><a href="edit.jsp">Create</a></td>
 </body>
 </html>
