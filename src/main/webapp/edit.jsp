@@ -8,15 +8,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 
-<form method="post" action="meals">
+<form method="post" action="meals" accept-charset="UTF-8">
     <input type="hidden" name="id" value="${meal.id}">
     <dl>
         <dt>DateTime:</dt>
-        <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required></dd>
+        <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime"  required></dd>
     </dl>
     <dl>
         <dt>Description:</dt>

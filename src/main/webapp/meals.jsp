@@ -11,6 +11,7 @@
 
 <html>
 <head>
+    <meta charset="UTF-8">
     <style>
         .normal {
             color: green;
@@ -27,19 +28,19 @@
 <c:forEach var="meal" items="${meal_list}">
     <table>
         <c:if test="${meal.isExcess()==false}">
-            <tr class="excess">
-        </c:if>
-        <c:if test="${meal.isExcess()}">
-            <tr class="normal">
-        </c:if>
-            <td ><c:out value="${meal.getDescription()}"/></td>
+        <tr class="excess">
+            </c:if>
+            <c:if test="${meal.isExcess()}">
+        <tr class="normal">
+            </c:if>
+            <td><c:out value="${meal.getDescription()}"/></td>
             <td><c:out value="${meal.getCalories()}"/></td>
             <td><c:out value="${meal.getFormattedDateTime()}"/></td>
-            <td><a href="edit.jsp?action=update?id=${meal.getId()}">Update</a></td>
-            <td>Delete</td>
+            <td><a href="meals?action=update&id=${meal.getId()}">Update</a></td>
+            <td><a href="meals?action=delete&id=${meal.getId()}">Delete</a></td>
         </tr>
     </table>
 </c:forEach>
-<td><a href="edit.jsp">Create</a></td>
+<td><a href="meals?action=create">Create</a></td>
 </body>
 </html>
