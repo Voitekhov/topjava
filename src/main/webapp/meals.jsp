@@ -35,7 +35,7 @@
             <td ><c:out value="${meal.getDescription()}"/></td>
             <td><c:out value="${meal.getCalories()}"/></td>
             <td><c:out value="${meal.getFormattedDateTime()}"/></td>
-            <td><a href="edit.jsp?id=${meal.getId()}">Update</a></td>
+            <td><a href="edit.jsp?action=update?id=${meal.getId()}">Update</a></td>
             <td>Delete</td>
         </tr>
     </table>
