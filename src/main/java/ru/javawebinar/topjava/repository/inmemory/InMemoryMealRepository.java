@@ -3,61 +3,78 @@ package ru.javawebinar.topjava.repository.inmemory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryMealRepository implements MealRepository {
-    private final Map<Integer, Meal> repository = new ConcurrentHashMap<>();
-    private final AtomicInteger counter = new AtomicInteger(0);
-
-   /* {
-        repository.put(1, new Meal(1, LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак",
-                500));
-        repository.put(2, new Meal(2, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000));
-        repository.put(3, new Meal(3, LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500));
-        repository.put(4, new Meal(4, LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на " +
-                "граничное значение", 100));
-        repository.put(5, new Meal(5, LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак",
-                1000));
-        repository.put(6, new Meal(6, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500));
-        repository.put(7, new Meal(7, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410);
-    }*/
+    private final Map<Integer, ConcurrentHashMap<Integer, Meal>> repository =
+            new ConcurrentHashMap<>();
+    private final AtomicInteger mealCounter = new AtomicInteger(0);
 
     {
-       // MealsUtil.meals.forEach(this::save);
+        repository.put(1, new ConcurrentHashMap<>());
+        repository.put(2, new ConcurrentHashMap<>());
+        repository.put(3, new ConcurrentHashMap<>());
+        for (Meal m : MealsUtil.meals) {
+            save(m, 2);
+        }
     }
+
 
     @Override
     public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
-            meal.setId(counter.incrementAndGet());
-
-            repository.put(meal.getId(), meal);
+            meal.setId(mealCounter.incrementAndGet());
+            meal.setUserId(userId);
+            repository.get(userId).put(meal.getId(), meal);
             return meal;
+        } else {
+            Map<Integer, Meal> map = containedMeal(meal.getId(), userId);
+            if (map != null) {
+                map.merge(meal.getId(), meal, (meal1, meal2) -> meal2);
+                return meal;
+            }
         }
+        return null;
         // handle case: update, but not present in storage
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        //return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
-    public boolean delete(int id,int userId) {
-        return repository.remove(id) != null;
+    public boolean delete(int id, int userId) {
+        return repository.get(userId).remove(id) != null;
     }
 
     @Override
-    public Meal get(int id,int userId) {
-        return repository.get(id);
+    public Meal get(int id, int userId) {
+        Map<Integer, Meal> map = containedMeal(id, userId);
+        if (map != null) {
+            return map.get(id);
+        }
+        throw new NotFoundException("Meal with id:" + id + " not found ");
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
-        return repository.values();
+    public List<Meal> getAll(int userId) {
+        ArrayList<Meal> listOfmeal = new ArrayList<>(repository.get(userId).values());
+        if (listOfmeal.size() > 0) {
+            return listOfmeal;
+        }
+        throw new NotFoundException("User don`t have meals");
+
+
+    }
+
+    private Map<Integer, Meal> containedMeal(int mealId, int userId) {
+        Map<Integer, Meal> map = repository.get(userId);
+        if (repository.get(userId).containsKey(mealId)) {
+            return map;
+        }
+        return null;
+
     }
 }
 
