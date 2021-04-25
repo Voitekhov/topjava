@@ -19,7 +19,7 @@ public class InMemoryMealRepository implements MealRepository {
         repository.put(2, new ConcurrentHashMap<>());
         repository.put(3, new ConcurrentHashMap<>());
         for (Meal m : MealsUtil.meals) {
-            save(m, 2);
+            save(m, 1);
         }
     }
 
@@ -60,10 +60,11 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         ArrayList<Meal> listOfmeal = new ArrayList<>(repository.get(userId).values());
+        listOfmeal.sort((o1, o2) -> o1.getDateTime().compareTo(o2.getDateTime()) * -1);
         if (listOfmeal.size() > 0) {
             return listOfmeal;
         }
-        throw new NotFoundException("User don`t have meals");
+        return null;
 
 
     }
