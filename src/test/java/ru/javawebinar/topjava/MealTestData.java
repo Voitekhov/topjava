@@ -1,15 +1,9 @@
 package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
@@ -24,9 +18,9 @@ public class MealTestData {
     public static final Meal MEAL_DINNER = new Meal(MEAL_ID + 2, LocalDateTime.of(2020, 06, 30, 0,
             0),
             "Launch", 1000);
-    public static final Meal MEAL_ADMIN = new Meal(MEAL_ID + 3, LocalDateTime.of(2010, 11, 23, 0, 0),
-            "Admin Launch", 1300);
-
+   /* public static final Meal MEAL_ADMIN = new Meal(MEAL_ID+3,LocalDateTime.of(2010,11,23,0,0),
+            "Admin Launch",1300);
+*/
 
     public static Meal getNew() {
         return new Meal(null, LocalDateTime.now(), "NEW MEAL", 777);

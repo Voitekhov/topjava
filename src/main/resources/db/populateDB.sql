@@ -18,4 +18,4 @@ INSERT INTO meals (description, calories, date_time, user_id)
 VALUES ('Breakfast', 1000, '2020-04-30', 100000),
        ('Launch', 1500, '2020-03-30', 100000),
        ('Dinner', 1000, '2020-06-30', 100000),
-       ('Admin Launch', 1300, '2010-11-23', 100000)
+       ('Admin Launch', 1300, '2010-11-23', 100001)

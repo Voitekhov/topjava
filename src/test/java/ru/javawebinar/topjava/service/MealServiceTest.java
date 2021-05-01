@@ -10,12 +10,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
 
@@ -50,12 +49,16 @@ public class MealServiceTest {
 
     @Test
     public void getBetweenInclusive() {
+        List<Meal> list = mealService.getBetweenInclusive(LocalDate.of(2020, 03, 30),
+                LocalDate.of(2020, 04, 30), USER_ID);
+        assertThat(list).isEqualTo(Arrays.asList(MEAL_BREAKFAST, MEAL_LANCH));
+
     }
 
     @Test
     public void getAll() {
         List<Meal> list = mealService.getAll(USER_ID);
-        assertThat(list).isEqualTo(Arrays.asList(MEAL_BREAKFAST, MEAL_LANCH, MEAL_DINNER, MEAL_ADMIN));
+        assertThat(list).isEqualTo(Arrays.asList(MEAL_DINNER, MEAL_BREAKFAST, MEAL_LANCH));
     }
 
     @Test
@@ -73,6 +76,6 @@ public class MealServiceTest {
         int createdId = created.getId();
         Meal newMeal = getNew();
         newMeal.setId(createdId);
-        assertThat(mealService.get(createdId,USER_ID)).isEqualTo(newMeal);
+        assertThat(mealService.get(createdId, USER_ID)).isEqualTo(newMeal);
     }
 }
